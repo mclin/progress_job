@@ -6,16 +6,15 @@ module ProgressJob
 
     def before(job)
       @job = job
-      job.update_column(:progress_max, @progress_max)
-      job.update_column(:progress_current, 0)
+      job.update_attributes({progress_max: @progress_max, progress_current: 0})
     end
 
     def update_progress(step: 1)
-      @job.update_column(:progress_current, @job.progress_current + step)
+      @job.update_attributes({progress_current: @job.progress_current + step})
     end
 
     def update_stage(stage)
-      @job.update_column(:progress_stage, stage)
+      @job.update_attributes({progress_stage: stage})
     end
 
     def update_stage_progress(stage, step: 1)
@@ -24,11 +23,11 @@ module ProgressJob
     end
 
     def update_progress_max(progress_max)
-      @job.update_column(:progress_max, progress_max)
+      @job.update_attributes({progress_max: progress_max})
     end
 
     def error(job, exception)
-      job.update_column(:progress_stage, exception.message)
+      job.update_attributes({progress_stage: exception.message}) 
     end
   end
 end
